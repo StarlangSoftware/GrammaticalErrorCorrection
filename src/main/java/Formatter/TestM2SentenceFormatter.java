@@ -9,9 +9,15 @@ import java.util.ArrayList;
 
 public class TestM2SentenceFormatter {
 
+    /**
+     * The method reads the files in a folder given the foldername and formats the annotated sentences in M2formats.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
-        File folder = new File("data/yadyok");
+        String fileName = "data/yadyok";
+        File folder = new File(fileName);
         File[] listOfFiles = folder.listFiles();
         int counter = 0;
         for (File file : listOfFiles) {

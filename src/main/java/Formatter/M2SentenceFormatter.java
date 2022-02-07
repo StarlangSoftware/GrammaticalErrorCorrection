@@ -123,7 +123,7 @@ public class M2SentenceFormatter {
     }
 
     private void sortM2Formats(){
-        Comparator<M2Format> comparator = Comparator.comparing(M2Format::getStartIdx).thenComparing(M2Format::getEndIdx);
+        Comparator<M2Format> comparator = Comparator.comparing(M2Format::getStartIndex).thenComparing(M2Format::getEndIndex);
         m2Formats.sort(comparator);
     }
 }

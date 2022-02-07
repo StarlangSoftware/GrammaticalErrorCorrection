@@ -1,64 +1,66 @@
 package Formatter;
 
+
+/**
+ * The class holds the format of the M2ErrorFormat.
+ */
+
 public class M2Format {
-    private int startIdx;
-    private int endIdx;
-    private String op;
-    private String error;
-    private String edit;
+    private int startIndex;
+    private int endIndex;
+    private String operation;
+    private String grammaticalError;
+    private String editOfWord;
     private int annotatorId;
 
-    public M2Format(int startIdx, int endIdx, String op, String error, String edit, int annotatorId){
-        this.startIdx = startIdx;
-        this.endIdx = endIdx;
-        this.op = op;
-        this.error = error;
-        this.edit = edit;
+    public M2Format(int startIndex, int endIndex, String operation, String grammaticalError, String editOfWord, int annotatorId){
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+        this.operation = operation;
+        this.grammaticalError = grammaticalError;
+        this.editOfWord = editOfWord;
         this.annotatorId = annotatorId;
     }
 
-    public M2Format(){
 
+    public int getStartIndex() {
+        return startIndex;
     }
 
-    public int getStartIdx() {
-        return startIdx;
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
     }
 
-    public void setStartIdx(int startIdx) {
-        this.startIdx = startIdx;
+    public int getEndIndex() {
+        return endIndex;
     }
 
-    public int getEndIdx() {
-        return endIdx;
+    public void setEndIndex(int endIndex) {
+        this.endIndex = M2Format.this.endIndex;
     }
 
-    public void setEndIdx(int endIdx) {
-        this.endIdx = endIdx;
+    public String getOperation() {
+        return operation;
     }
 
-    public String getOp() {
-        return op;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
-    public void setOp(String op) {
-        this.op = op;
+    public String getGrammaticalError() {
+        return grammaticalError;
     }
 
-    public String getError() {
-        return error;
+    public void setGrammaticalError(String grammaticalError) {
+        this.grammaticalError = grammaticalError;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public String getEditOfWord() {
+        return editOfWord;
     }
 
-    public String getEdit() {
-        return edit;
-    }
-
-    public void setEdit(String edit) {
-        this.edit = edit;
+    public void setEditOfWord(String editOfWord) {
+        this.editOfWord = editOfWord;
     }
 
     public int getAnnotatorId() {
@@ -69,14 +71,14 @@ public class M2Format {
         this.annotatorId = annotatorId;
     }
 
-    public String getNoErrorFromat(){
-        return "A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0";
+    public String getNoGrammaticalErrorFromat(){
+        return "A -1 -1|||nooperation|||-NONE-|||REQUIRED|||-NONE-|||0";
     }
     public String toString(){
         String colon = ":";
-        if (op.equals("UNK"))
+        if (operation.equals("UNK"))
             colon = "";
-        return "A " + startIdx + " " + endIdx  + "|||" + op + colon + error + "|||" + edit +  "|||REQUIRED|||-NONE|||"+annotatorId;
+        return "A " + startIndex + " " + endIndex  + "|||" + operation + colon + grammaticalError + "|||" + editOfWord +  "|||REQUIRED|||-NONE|||"+annotatorId;
     }
 
 }

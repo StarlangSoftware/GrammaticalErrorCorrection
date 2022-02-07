@@ -4,7 +4,6 @@ import AnnotatedSentence.AnnotatedSentence;
 import AnnotatedSentence.AnnotatedWord;
 import AnnotatedSentence.ViewLayerType;
 import DataCollector.Sentence.SentenceAnnotatorPanel;
-import org.apache.batik.dom.AbstractChildNode;
 
 
 import javax.swing.*;
@@ -15,22 +14,35 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The class extends the class SentenceAnnotatorPanel.
+ */
+
 public class SentenceGECPanel extends SentenceAnnotatorPanel {
+
     final private ArrayList<String> errorsList;
     final private ArrayList<String> GecOplist;
     protected DefaultListModel GecListmodel;
-    protected JList GecOpList; // operation e.g. R, U, M, etc.
+    protected JList GecOpList;
     protected JScrollPane paneGecOpList;
     protected int isAltDown;
 
+    /**
+     * The constuctor calls the super with the correct LayerType. Sets the GecOpList
+     * Removes the actionListener of editText and adds one that is customized with more keyboard events.
+     * @param currentPath
+     * @param fileName
+     * @param errorsList
+     * @param GecOplist
+     */
     public SentenceGECPanel(String currentPath, String fileName, ArrayList<String> errorsList, ArrayList<String> GecOplist){
+
         super(currentPath, fileName, ViewLayerType.GRAMMATICAL_ERROR);
         this.errorsList = errorsList;
         this.GecOplist = GecOplist;
         setGecOpList();
         setLayout(new BorderLayout());
 
-        // remove the ActionListener of editText
         for (ActionListener al : super.editText.getActionListeners())
             super.editText.removeActionListener(al);
 
@@ -42,7 +54,6 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
                         clickedWord.getGrammaticalError().setWordIndex(newText);
                     } else if (clickedWord.getGrammaticalError().getOperation().equals("M")) {
                         clickedWord.setName(newText);
-//                    clickedWord.setGrammaticalErrorEdit(newText);
                     } else {
                         clickedWord.getGrammaticalError().setEditedWord(newText);
                     }
@@ -73,6 +84,12 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
 
     }
 
+    /**
+     * The method populates the listModels with the lists: errors' list and the operation's list.
+     * @param sentence
+     * @param wordIndex
+     * @return
+     */
     @Override
     public int populateLeaf(AnnotatedSentence sentence, int wordIndex){
         int selectedIndex = -1;
@@ -96,7 +113,11 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
 
     }
 
+    /**
+     * The method creates a listModel for the operations and updates the operation according to the selected value..
+     */
     private void setGecOpList(){
+
         GecListmodel = new DefaultListModel();
         GecOpList = new JList(GecListmodel);
         GecOpList.setVisible(false);
@@ -104,39 +125,17 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
             if (!listSelectionEvent.getValueIsAdjusting()) {
                 if (GecOpList.getSelectedIndex() != -1 && clickedWord != null) {
                     clickedWord.setSelected(false);
-
                     if (GecOpList.getSelectedValue().toString().equals("M:Before")){
-//                        String newSentence = "";
-//                        ArrayList<String> wordArray = new ArrayList<String>(Arrays.asList(sentence.toString().split(" ")));
                         String missing = "{english=-}{grammaticalError=-M--}";
                         AnnotatedWord word = new AnnotatedWord(missing);
                         sentence.insertWord(selectedWordIndex, word);
-
-//                        wordArray.add(selectedWordIndex, missing);
-//                        for (int i = 0; i < wordArray.size(); i++){
-//                            newSentence = newSentence + " " + wordArray.get(i);
-//                        }
-//                        sentence = new AnnotatedSentence(newSentence);
-//                        AnnotatedWord missing_word = ((AnnotatedWord) sentence.getWord(selectedWordIndex));
-//                        missing_word.getGrammaticalError().setOperation("M");
                     } else if (GecOpList.getSelectedValue().toString().equals("M:After")) {
-//                        String newSentence = "";
-//                        ArrayList<String> wordArray = new ArrayList<String>(Arrays.asList(sentence.toString().split(" ")));
-//                        String missing = "{english=-}{grammaticalError=-M--}";
-//                        wordArray.add(selectedWordIndex+1, missing);
-//                        for (int i = 0; i < wordArray.size(); i++){
-//                            newSentence = newSentence + " " + wordArray.get(i);
-//                        }
-//                        sentence = new AnnotatedSentence(newSentence);
-//                        AnnotatedWord missing_word = ((AnnotatedWord) sentence.getWord(selectedWordIndex+1));
-//                        missing_word.getGrammaticalError().setOperation("M");
                         String missing = "{english=-}{grammaticalError=-M--}";
                         AnnotatedWord word = new AnnotatedWord(missing);
                         sentence.insertWord(selectedWordIndex+1, word);
                     } else if (!clickedWord.getGrammaticalError().getOperation().equals("M")) {
                         clickedWord.getGrammaticalError().setOperation(GecOpList.getSelectedValue().toString());
                     }
-
                     sentence.writeToFile(new File(fileDescription.getFileName()));
                     GecOpList.setVisible(false);
                     paneGecOpList.setVisible(false);
@@ -165,6 +164,20 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
 
     }
 
+    /**
+     * The method draws the words/tokens of the sentence,
+     * draws the index of each above the word. (no index if the words was added as missing)
+     * draws the selected operation, error.
+     * draws the edited word, and the edited index.
+     * @param word
+     * @param g
+     * @param currentLeft
+     * @param lineIndex
+     * @param wordIndex
+     * @param maxSize
+     * @param wordSize
+     * @param wordTotal
+     */
     @Override
     protected void drawLayer(AnnotatedWord word, Graphics g, int currentLeft, int lineIndex, int wordIndex, int maxSize, ArrayList<Integer> wordSize, ArrayList<Integer> wordTotal) {
 
@@ -176,7 +189,6 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
             g.setColor(Color.BLACK);
             wordIndex++;
         }
-
         if (word.getGrammaticalError().getError() != null) {
             String opToWrite = "";
             if (!word.getGrammaticalError().equals("None")) {
@@ -220,7 +232,13 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
         return maxSize;
     }
 
+    /**
+     * The method displays the operations list.
+     */
     public void mouseDoubleClicked(){
+        /**
+         * The method displays the operations list.
+         */
         list.setVisible(false);
         pane.setVisible(false);
         int selectedIndex;
@@ -256,8 +274,16 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
     }
 
 
+    /**
+     * The method finds the selected word as the mouse moves.
+     * @param e
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
+        /**
+         * The method finds the selected word as the mouse moves.
+         * @param e
+         */
         for (int i = 0; i < sentence.wordCount(); i++){
             AnnotatedWord word = (AnnotatedWord) sentence.getWord(i);
             if (word.getArea().contains(e.getX(), e.getY())){
@@ -283,6 +309,15 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
             repaint();
         }
     }
+
+
+    /**
+     * The method detects a mouse click and handles the click accordingly.
+     * isControlDown: for editing the word.
+     * isAltDown: for editing the index of the word.
+     * isShiftDown: for deleting a word that was added earlier as a missing word.
+     * @param mouseEvent
+     */
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
@@ -352,6 +387,10 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
         this.repaint();
     }
 
+
+    /**
+     * The method sets the lineSpace, a big lineSpace leads to a big gap between the lines
+     */
     @Override
     protected void setLineSpace() {
         lineSpace = 140;

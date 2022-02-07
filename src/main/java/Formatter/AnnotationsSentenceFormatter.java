@@ -4,11 +4,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-import AnnotatedSentence.AnnotatedSentence;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.SimpleTokenizer;
-import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
@@ -20,11 +18,15 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+/**
+ * The class is responsible for splitting the essays into sentences and saving each sentence in a file.
+ */
+
 public class AnnotationsSentenceFormatter {
 
-    private static String sourceRootFolderName = "corpus";
+    private static String sourceRootFolderName = "corpus"; // a folder containing folders (like yadyok below)
     private  static String targetRootFolderName = "data";
-    private  static String fileSourceName = "yadyok";
+    private  static String fileSourceName = "yadyok"; // coprpus/yadyok
 
     public static void main(String[] args) throws IOException, InvalidFormatException {
 
@@ -79,6 +81,10 @@ public class AnnotationsSentenceFormatter {
 
     }
 
+    /**
+     * Combines all the annotated sentences in the subfolders in one folder.
+     * @throws IOException
+     */
     public static void combineSentences() throws IOException {
 
         File combined_folder = new File(targetRootFolderName + "/combined" );
@@ -95,16 +101,9 @@ public class AnnotationsSentenceFormatter {
                 File subfolder = new File(String.valueOf(dir));
                 File[] sentencFiles = subfolder.listFiles();
                 for (File file : sentencFiles) {
-
-
                     if (file.isFile()) {
-
-//                        private static void copyFileUsingJava7Files(File source, File dest) throws IOException {
                         fileName = String.format("%04d", counter);
                         Files.copy(file.toPath(), new File(targetRootFolderName + "/" + "combined"+"/"+ fileName + ".train").toPath());
-//                        }
-
-//                        file.renameTo(new File(fileName));
                         counter++;
                     }
                 }
@@ -113,6 +112,13 @@ public class AnnotationsSentenceFormatter {
 
     }
 
+    /**
+     * Reads a docx file and returns all the text in it.
+     * @param file_in
+     * @return
+     * @throws IOException
+     * @throws InvalidFormatException
+     */
     public static String docxReader(File file_in) throws IOException, InvalidFormatException {
         FileInputStream fis = new FileInputStream(file_in);
         XWPFDocument file = new XWPFDocument(OPCPackage.open(fis));
@@ -120,6 +126,13 @@ public class AnnotationsSentenceFormatter {
         return ext.getText();
 
     }
+
+    /**
+     * Reads a pdf file and returns the text in it.
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static String pdfReader(File file) throws IOException {
         PDFTextStripper pdfStripper = null;
         PDDocument pdDoc = null;

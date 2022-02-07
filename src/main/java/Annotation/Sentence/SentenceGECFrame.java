@@ -14,10 +14,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
+/**
+ * The class extends the SentenceAnnotatorFrame class. It is the frame of the annotation tool.
+ */
 public class SentenceGECFrame extends SentenceAnnotatorFrame {
 
     private ArrayList<String> errorsList = new ArrayList<String>();
     private ArrayList<String> GecOplist = new ArrayList<String>(){{
+        /**
+         * The list contains the available grammatical error correction operations.
+         */
         add("None");
         add("R");
         add("U");
@@ -26,7 +32,14 @@ public class SentenceGECFrame extends SentenceAnnotatorFrame {
         add("M:After");
     }};
 
+    /**
+     * The method call's the super constructor, reads the grammatical errors' list.
+     * It adds a JMenuItem "View Annotations" and appends an action listener that creates an object
+     * of "ViewSentenceGECAnnotationFrame".
+     */
+
     public SentenceGECFrame() {
+
         super();
         try {
             Scanner input = new Scanner(new File("errorsList.txt"));

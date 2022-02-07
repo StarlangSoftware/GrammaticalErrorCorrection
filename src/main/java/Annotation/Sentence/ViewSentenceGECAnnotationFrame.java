@@ -39,9 +39,12 @@ public class ViewSentenceGECAnnotationFrame extends ViewSentenceAnnotationFrame 
         }
     }
 
-
-
+    /**
+     * The method prepares the data as rows in order to be viewed in viewAnnotations table.
+     * @param corpus
+     */
     protected void prepareData(AnnotatedCorpus corpus){
+
         data = new ArrayList<>();
         for (int i = 0; i < corpus.sentenceCount(); i++){
             AnnotatedSentence sentence = (AnnotatedSentence) corpus.getSentence(i);
@@ -65,7 +68,14 @@ public class ViewSentenceGECAnnotationFrame extends ViewSentenceAnnotationFrame 
         }
     }
 
+
+    /**
+     * The constructor creates a dataTable (JTable) and sets the columns and their sizes.
+     * @param corpus
+     * @param sentenceGECFrame
+     */
     public ViewSentenceGECAnnotationFrame(AnnotatedCorpus corpus, SentenceGECFrame sentenceGECFrame){
+
         super(corpus);
         COLOR_COLUMN_INDEX = 6;
         TAG_INDEX = 3;
