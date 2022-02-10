@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import Corpus.Sentence;
+import Dictionary.Word;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
@@ -50,10 +51,10 @@ public class AnnotationsSentenceFormatter {
             splitter = new EnglishSplitter();
             ArrayList<Sentence> sentences = splitter.split(text);
             for (Sentence sent: sentences){
-                String tokens[] = sent.toString().split("\\s+");
+                ArrayList<Word> tokens = sent.getWords();
                 String annotationFormat = "";
                 int i = 0;
-                for (String token : tokens){
+                for (Word token : tokens){
                     annotationFormat = annotationFormat +  "{english=" + token +  "}{grammaticalError=---}";
                     if(!(i++ == sentences.size() - 1)){
                         annotationFormat = annotationFormat + " ";
