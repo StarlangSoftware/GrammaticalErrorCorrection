@@ -2,11 +2,9 @@ package Formatter;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Arrays;
+import java.util.ArrayList;
 
-import opennlp.tools.sentdetect.SentenceDetectorME;
-import opennlp.tools.sentdetect.SentenceModel;
-import opennlp.tools.tokenize.SimpleTokenizer;
+import Corpus.Sentence;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
@@ -17,6 +15,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import Corpus.EnglishSplitter;
 
 /**
  * The class is responsible for splitting the essays into sentences and saving each sentence in a file.
@@ -27,9 +26,8 @@ public class AnnotationsSentenceFormatter {
     private static String sourceRootFolderName = "corpus"; // a folder containing folders (like yadyok below)
     private  static String targetRootFolderName = "data";
     private  static String fileSourceName = "yadyok"; // coprpus/yadyok
-
+    static EnglishSplitter splitter;
     public static void main(String[] args) throws IOException, InvalidFormatException {
-
 
         File folder = new File( sourceRootFolderName + "/" + fileSourceName);
 
@@ -43,27 +41,21 @@ public class AnnotationsSentenceFormatter {
         for (File file : listOfFiles) {
             String extension = FilenameUtils.getExtension(String.valueOf(file));
             String text = "";
-            // refer to model file "en-sent,bin", available at link http://opennlp.sourceforge.net/models-1.5/
-            InputStream en_sent= new FileInputStream("en-sent.bin");
-            SentenceModel sent_model = new SentenceModel(en_sent);
-            // feed the model to SentenceDetectorME class
-            SentenceDetectorME sdetector = new SentenceDetectorME(sent_model);
-            SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
 
             if (extension.equals("pdf"))
                 text = pdfReader(file);
             else if (extension.equals("docx"))
                 text = docxReader(file);
 
-            String sentences[] = sdetector.sentDetect(text);
-            sentences = Arrays.copyOfRange(sentences, 1, sentences.length);
-            for (String sent: sentences){
-                String tokens[] = tokenizer.tokenize(sent);
+            splitter = new EnglishSplitter();
+            ArrayList<Sentence> sentences = splitter.split(text);
+            for (Sentence sent: sentences){
+                String tokens[] = sent.toString().split("\\s+");
                 String annotationFormat = "";
                 int i = 0;
                 for (String token : tokens){
                     annotationFormat = annotationFormat +  "{english=" + token +  "}{grammaticalError=---}";
-                    if(!(i++ == sentences.length - 1)){
+                    if(!(i++ == sentences.size() - 1)){
                         annotationFormat = annotationFormat + " ";
                     }
                 }

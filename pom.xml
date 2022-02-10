@@ -33,6 +33,14 @@
             <artifactId>DataCollector</artifactId>
             <version>1.0.36</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.starlangsoftware</groupId>
+            <artifactId>Corpus</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -70,92 +78,6 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.6.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>1.8</source>-->
-<!--                    <target>1.8</target>-->
-<!--&lt;!&ndash;                    <executable>${JAVA_HOME}/bin/javac</executable>&ndash;&gt;-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--&lt;!&ndash;                <plugin>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <groupId>org.apache.maven.plugins</groupId>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <artifactId>maven-gpg-plugin</artifactId>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <version>1.6</version>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <executions>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <execution>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <id>sign-artifacts</id>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <phase>verify</phase>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <goals>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <goal>sign</goal>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </goals>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </execution>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </executions>&ndash;&gt;-->
-<!--&lt;!&ndash;                </plugin>&ndash;&gt;-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-source-plugin</artifactId>-->
-<!--                <version>2.2.1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>attach-sources</id>-->
-<!--                        <goals>-->
-<!--                            <goal>jar-no-fork</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <source>8</source>-->
-<!--                </configuration>-->
-<!--                <version>2.9.1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>attach-javadocs</id>-->
-<!--                        <goals>-->
-<!--                            <goal>jar</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-<!--            <plugin>-->
-<!--                <artifactId>maven-assembly-plugin</artifactId>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>sentence-GEC</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>single</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <archive>-->
-<!--                                <manifest>-->
-<!--                                    <mainClass>Annotation.Sentence.TestSentenceGECFrame</mainClass>-->
-<!--                                </manifest>-->
-<!--                            </archive>-->
-<!--                            <finalName>sentence-GEC</finalName>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--                    <descriptorRefs>-->
-<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
-<!--                    </descriptorRefs>-->
-<!--                    <appendAssemblyId>false</appendAssemblyId>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
 
     <build>
         <plugins>
