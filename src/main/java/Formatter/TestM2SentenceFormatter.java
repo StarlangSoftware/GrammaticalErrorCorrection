@@ -34,7 +34,6 @@ public class TestM2SentenceFormatter {
                 System.out.println("\n");
             }
         }
-        System.out.println(counter);
     }
 
     public static String readFile(String fileName) throws IOException {
