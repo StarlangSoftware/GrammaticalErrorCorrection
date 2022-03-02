@@ -3,7 +3,9 @@ package Formatter;
 
 import AnnotatedSentence.AnnotatedSentence;
 import AnnotatedSentence.AnnotatedWord;
+import org.apache.bcel.generic.ACONST_NULL;
 
+import javax.swing.plaf.IconUIResource;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -38,19 +40,28 @@ public class M2SentenceFormatter {
 
     public ArrayList<M2Format> formatSentence() {
         unks = "";
+        String currentIdx;
         for (int i = 0; i < inputSentence.getWords().size(); i++) {
             AnnotatedWord annotatedWord = (AnnotatedWord) inputSentence.getWord(i);
             word = annotatedWord.getName();
-            op = annotatedWord.getGrammaticalError().getOperation();
-            error = annotatedWord.getGrammaticalError().getError();
-            edit = annotatedWord.getGrammaticalError().getEditedWord();;
-            String currentIdx = annotatedWord.getGrammaticalError().getWordIndex();
+            if (annotatedWord.getGrammaticalError() != null) {
+                op = annotatedWord.getGrammaticalError().getOperation();
+                error = annotatedWord.getGrammaticalError().getError();
+                edit = annotatedWord.getGrammaticalError().getEditedWord();
+                 currentIdx = annotatedWord.getGrammaticalError().getWordIndex();
+            }
+            else {
+                op = "";
+                error = "";
+                edit = "";
+                currentIdx = "";
+            }
 
             if (currentIdx.isEmpty()) {
                 //recording the positions where a there is a change of index(Word order errors)
                 woIdx = woIdx + '#';
             } else {
-                woIdx = woIdx + currentIdx;
+                woIdx = woIdx + currentIdx +"%";
             }
 
             if (!op.equals("M"))
@@ -69,7 +80,7 @@ public class M2SentenceFormatter {
             if (op.equals("UNK")){
                 edit = word;
                 // recording their positions to combine the consecutive ones later as a single m1 format.
-                unks = unks + startIdx;
+                unks = unks + startIdx + "%";
             } else if (!op.equals("M")) {
                 unks = unks + "#";
             }
@@ -80,7 +91,10 @@ public class M2SentenceFormatter {
             }
         }
 
-        processWoGrammaticalErrors();
+        try{
+            processWoGrammaticalErrors();
+        } catch (Exception exception){} //TODO change the separator - to something that rarely happens in text. Current problem e.g. (ADJ-R-break-resistant-)
+
         processUnkGrammaticalErrors();
         sortM2Formats();
 
@@ -88,39 +102,38 @@ public class M2SentenceFormatter {
     }
 
     private void processUnkGrammaticalErrors(){
-        for (String item : unks.split("#")){
-            if (item.isEmpty())
-                continue;
-           char[] arr = item.toCharArray();
-           startIdx = arr[0] - '0';
-           endIdx = ((arr[arr.length-1]) - '0') + 1;
+        List<String>  filteredWoIdx = new ArrayList<String>(Arrays.asList(unks.split("#")));
+        filteredWoIdx.removeAll(Collections.singleton(""));
+        for (String s : filteredWoIdx) {
+            List<String> filteredSubWoIdx = new ArrayList<String>(Arrays.asList(s.split("%")));
+            startIdx = Integer.parseInt(filteredSubWoIdx.get(0));
+            endIdx = Integer.parseInt(filteredSubWoIdx.get(filteredSubWoIdx.size()-1)) + 1;
             edit = String.join(" ", originalSentence.subList(startIdx, endIdx));
             M2Format m2Format = new M2Format(startIdx, endIdx, "UNK", "", edit, annotatorId);
             m2Formats.add(m2Format);
         }
-
     }
+
+    /**
+     * The method processes the @woIdx string that contains either a hash, a number, or a percent.
+     * The method splits the string by #, to end up with a list of strings containing the modified indices
+     * separated by %. The string is splitted again by % returning a list of numbers which gets sorted.
+     * Finally, it sets the number at index 0 as the start index and the number at index -1, plus 1, as the end index.
+     */
     private void processWoGrammaticalErrors(){
-        System.out.println(woIdx);
         List<String>  filteredWoIdx = new ArrayList<String>(Arrays.asList(woIdx.split("#")));
         filteredWoIdx.removeAll(Collections.singleton(""));
-        System.out.println(filteredWoIdx);
         for (String s : filteredWoIdx){
-            char[] arr = s.toCharArray();
-            edit = "";
-            for (int i=0; i < arr.length; i++){
-                edit = edit + originalSentence.get(arr[i] - '0');
-                if (!( i == arr.length-1))
-                    edit = edit + " ";
-            }
-            Arrays.sort(arr);
-            startIdx = arr[0] - '0';
-            endIdx = (arr[arr.length-1] - '0') + 1;
+            List<String> filteredSubWoIdx = new ArrayList<String>(Arrays.asList(s.split("%")));
+            Collections.sort(filteredSubWoIdx);
+            startIdx = Integer.parseInt(filteredSubWoIdx.get(0));
+            endIdx = Integer.parseInt(filteredSubWoIdx.get(filteredSubWoIdx.size()-1)) + 1;
             M2Format m2Format = new M2Format(startIdx, endIdx, "R", "WO", edit, annotatorId);
             m2Formats.add(m2Format);
 
         }
     }
+
 
     private void sortM2Formats(){
         Comparator<M2Format> comparator = Comparator.comparing(M2Format::getStartIndex).thenComparing(M2Format::getEndIndex);
