@@ -146,7 +146,7 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
 
     @Override
     protected void setBounds() {
-        pane.setBounds(((AnnotatedWord) sentence.getWord(selectedWordIndex)).getArea().x, ((AnnotatedWord) sentence.getWord(selectedWordIndex)).getArea().y + 20, 240, (int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.4));
+        pane.setBounds(((AnnotatedWord) sentence.getWord(selectedWordIndex)).getArea().getX(), ((AnnotatedWord) sentence.getWord(selectedWordIndex)).getArea().getY() + 20, 240, (int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.4));
 
     }
 
@@ -240,7 +240,7 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
             lastClickedWord = clickedWord;
             paneGecOpList.setVisible(true);
             paneGecOpList.getVerticalScrollBar().setValue(0);
-            paneGecOpList.setBounds(((AnnotatedWord)sentence.getWord(selectedWordIndex)).getArea().x, ((AnnotatedWord)sentence.getWord(selectedWordIndex)).getArea().y + 20, 240, (int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.4));
+            paneGecOpList.setBounds(((AnnotatedWord)sentence.getWord(selectedWordIndex)).getArea().getX(), ((AnnotatedWord)sentence.getWord(selectedWordIndex)).getArea().getY() + 20, 240, (int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.4));
             this.repaint();
         }
     }
@@ -321,7 +321,7 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
                         lastClickedWord = clickedWord;
                         isAltDown = 0;
                         editText.setText(clickedWord.getName());
-                        editText.setBounds(clickedWord.getArea().x - 5, clickedWord.getArea().y + 30, 100, 30);
+                        editText.setBounds(clickedWord.getArea().getX() - 5, clickedWord.getArea().getY() + 30, 100, 30);
                         editText.setVisible(true);
                         pane.setVisible(false);
                         editText.requestFocus();
@@ -333,7 +333,7 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
                     if ((layerType == ViewLayerType.GRAMMATICAL_ERROR) && (!clickedWord.getGrammaticalError().getOperation().equals("M")))  {
                         isAltDown = 1;
                         editText.setText(""); // maybe set the given index here
-                        editText.setBounds(clickedWord.getArea().x - 5, clickedWord.getArea().y + 30, 100, 30);
+                        editText.setBounds(clickedWord.getArea().getX() - 5, clickedWord.getArea().getY() + 30, 100, 30);
                         editText.setText(clickedWord.getGrammaticalError().getWordIndex());
                         editText.setVisible(true);
                         pane.setVisible(false);
