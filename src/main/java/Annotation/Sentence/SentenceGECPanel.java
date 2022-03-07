@@ -340,7 +340,7 @@ public class SentenceGECPanel extends SentenceAnnotatorPanel {
                         editText.requestFocus();
                     }
 
-                } else if (mouseEvent.isShiftDown() && (clickedWord !=null ) && (clickedWord.getGrammaticalError().getOperation().equals("M"))){
+                } else if (mouseEvent.isShiftDown() && clickedWord != null && clickedWord.getGrammaticalError().getOperation().equals("M")){
                     String sentAfterRemoval = "";
                     ArrayList<String> wordArray = new ArrayList<String>(Arrays.asList(sentence.toString().split(" ")));
                     wordArray.remove(selectedWordIndex);
